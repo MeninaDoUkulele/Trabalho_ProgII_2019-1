@@ -49,12 +49,39 @@ void mediaFinal(float p1, float p2, float p3, float p4, float mParcial, float pf
     mFinal = (mParcial + pf)/2;
 }
 
+// Struct que armazena nome e notas de um aluno
+struct aluno{
+    char nome[30];
+    float p1;
+    float p2;
+    float p3;
+    float p4;
+    float pf;
+};
 
-// Função LuanaAna Sort;
-void funcaoOrdenacao(float *medias){
+// Definição de 10 alunos (por causa do arquivo)
+typedef struct aluno a1, a2, a3, a4, a5, a6, a7, a8, a9, a10; 
 
-}
-
+// Função principal
 int main(){
+    FILE *entrada, *saida;
+    int i;
+    char nomeEntrada[20];
+
+// Pedindo as informações pelo teclado
+    printf("Digite o nome dos arquivos de entrada: ");
+// Loop para percorrer 10 arquivos
+    for(i = 0; i < 10; i++){
+    // Pega o nome de cada arquivo
+        fgets(nomeEntrada, sizeof(nomeEntrada), stdin);
+
+    // Abre o arquivo
+        entrada = fopen(nomeEntrada, "r");
+
+    // Fecha o arquivo e vai para o próximo loop
+        fclose(entrada);
+    }
+
+    
     return 0;
 }
