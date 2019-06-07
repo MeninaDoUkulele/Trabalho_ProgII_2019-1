@@ -52,20 +52,14 @@ void mediaFinal(float p1, float p2, float p3, float p4, float mParcial, float pf
 // Struct que armazena nome e notas de um aluno
 struct aluno{
     char nome[30];
-    float p1;
-    float p2;
-    float p3;
-    float p4;
-    float pf;
-};
-
-// Definição de 10 alunos (por causa do arquivo)
-typedef struct aluno a1, a2, a3, a4, a5, a6, a7, a8, a9, a10; 
+    float p[5];
+}; 
 
 // Função principal
 int main(){
     FILE *entrada, *saida;
-    int i;
+    struct aluno a;
+    int i, j, m;
     char nomeEntrada[20];
 
 // Pedindo as informações pelo teclado
@@ -73,15 +67,24 @@ int main(){
 // Loop para percorrer 10 arquivos
     for(i = 0; i < 10; i++){
     // Pega o nome de cada arquivo
-        fgets(nomeEntrada, sizeof(nomeEntrada), stdin);
-
+        scanf("%s", nomeEntrada);
     // Abre o arquivo
         entrada = fopen(nomeEntrada, "r");
+
+        for(j = 0; j < 10; j++){
+            fgets(a.nome, sizeof(entrada), entrada);
+            fscanf(entrada, "%f %f %f %f %f", &a.p[0], &a.p[1], &a.p[2], &a.p[3], &a.p[4]);
+
+            printf("%s", a.nome);
+            for(m = 0; m < 5; m++){
+                printf("%f", a.p[m]);
+            }
+
+        }
 
     // Fecha o arquivo e vai para o próximo loop
         fclose(entrada);
     }
-
     
     return 0;
 }
