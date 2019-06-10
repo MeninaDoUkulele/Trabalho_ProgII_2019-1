@@ -11,6 +11,17 @@
 #include <math.h>
 
 
+
+// Struct que armazena nome e notas de um aluno
+struct aluno{
+    char nome[30];
+    float p1;
+    float p2;
+    float p3;
+    float p4;
+    float pf;
+};
+
 // Função que calcula a média parcial de um caso
 void mediaParcial(float p1, float p2, float p3, float p4, float mParcial){
     int i;
@@ -49,11 +60,9 @@ void mediaFinal(float p1, float p2, float p3, float p4, float mParcial, float pf
     mFinal = (mParcial + pf)/2;
 }
 
-// Struct que armazena nome e notas de um aluno
-struct aluno{
-    char nome[30];
-    float p[5];
-}; 
+void medias(float p1, float p2, float p3, float p4, float mParcial, float pf, float mFinal){
+    mediaFinal(p1, p2, p3, p4, mParcial, pf, mFinal);
+}
 
 // Função principal
 int main(){
@@ -71,16 +80,20 @@ int main(){
     // Abre o arquivo
         entrada = fopen(nomeEntrada, "r");
 
-        for(j = 0; j < 10; j++){
-            fgets(a.nome, sizeof(entrada), entrada);
-            fscanf(entrada, "%f %f %f %f %f", &a.p[0], &a.p[1], &a.p[2], &a.p[3], &a.p[4]);
+     // Lê o arquivo
+        while(!feof(entrada)){
+            fscanf(entrada, "%s %f %f %f %f %f", a.nome, &a.p1, &a.p2, &a.p3, &a.p4, &a.pf);
 
-            printf("%s", a.nome);
-            for(m = 0; m < 5; m++){
-                printf("%f", a.p[m]);
-            }
-
+            // Teste para garantir o valor das variáveis (apagar)
+            printf("\n%s\n", a.nome);
+            printf("%.2f ", a.p1);
+            printf("%.2f ", a.p2);
+            printf("%.2f ", a.p3);
+            printf("%.2f ", a.p4);
+            printf("%.2f ", a.pf);
         }
+
+
 
     // Fecha o arquivo e vai para o próximo loop
         fclose(entrada);
