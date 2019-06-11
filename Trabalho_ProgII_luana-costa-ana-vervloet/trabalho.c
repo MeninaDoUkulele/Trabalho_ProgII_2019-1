@@ -22,6 +22,12 @@ struct aluno{
     float pf;
 };
 
+struct passei{
+    char nome[30];
+    float mediaParcial;
+    float mediaFinal;
+};
+
 // Função que calcula a média parcial de um caso
 void mediaParcial(float p1, float p2, float p3, float p4, float mParcial){
     int i;
@@ -64,6 +70,7 @@ void medias(float p1, float p2, float p3, float p4, float mParcial, float pf, fl
     mediaFinal(p1, p2, p3, p4, mParcial, pf, mFinal);
 }
 
+
 // Função principal
 int main(){
     FILE *entrada, *saida;
@@ -101,3 +108,11 @@ int main(){
     
     return 0;
 }
+
+
+/*
+https://pt.stackoverflow.com/questions/72494/printar-strings-em-ordem-alfab%C3%A9tica
+
+para estudo de ordem alfabética
+- preciso revisar o funcionamento de struct e bibliotecas.
+*/
