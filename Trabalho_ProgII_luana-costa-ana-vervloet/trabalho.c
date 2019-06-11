@@ -28,6 +28,9 @@ struct passei{
     float mediaFinal;
 };
 
+typedef struct aluno Aluno;
+typedef struct passei Passei;
+
 // Função que calcula a média parcial de um caso
 void mediaParcial(float p1, float p2, float p3, float p4, float mParcial){
     int i;
@@ -66,15 +69,21 @@ void mediaFinal(float p1, float p2, float p3, float p4, float mParcial, float pf
     mFinal = (mParcial + pf)/2;
 }
 
+// Função que retorna a média parcial e a final
 void medias(float p1, float p2, float p3, float p4, float mParcial, float pf, float mFinal){
     mediaFinal(p1, p2, p3, p4, mParcial, pf, mFinal);
+}
+
+void aprovados(float p1, float p2, float p3, float p4, float mParcial, float pf, float mFinal, Passei *p, int j){
+    
 }
 
 
 // Função principal
 int main(){
     FILE *entrada, *saida;
-    struct aluno a;
+    Aluno a;
+    Passei p[100];
     int i, j, m;
     char nomeEntrada[20];
 
@@ -88,7 +97,7 @@ int main(){
         entrada = fopen(nomeEntrada, "r");
 
      // Lê o arquivo
-        while(!feof(entrada)){
+        for(j = 0; j < 10; j++){
             fscanf(entrada, "%s %f %f %f %f %f", a.nome, &a.p1, &a.p2, &a.p3, &a.p4, &a.pf);
 
             // Teste para garantir o valor das variáveis (apagar)
@@ -115,4 +124,9 @@ https://pt.stackoverflow.com/questions/72494/printar-strings-em-ordem-alfab%C3%A
 
 para estudo de ordem alfabética
 - preciso revisar o funcionamento de struct e bibliotecas.
+
+
+-> LISTA DE AFAZERES
+    . ver os que passaram, anotar o nome, a média parcial e a média final
+    
 */
