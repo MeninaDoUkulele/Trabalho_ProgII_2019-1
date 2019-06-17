@@ -62,21 +62,21 @@ void mediaParcial(float p1, float p2, float p3, float p4, float mParcial){
 }
 
 // Função que calcula a média final de um caso
-void mediaFinal(float p1, float p2, float p3, float p4, float mParcial, float pf, float mFinal){
+void mediaFinal(float p1, float p2, float p3, float p4, float mP, float pf, float mF){
     
-    mediaParcial(p1, p2, p3, p4, mParcial);
+    mediaParcial(p1, p2, p3, p4, mP);
 
-    mFinal = (mParcial + pf)/2;
+    mF = (mP + pf)/2;
 }
 
 // Função que retorna a média parcial e a final
-void medias(float p1, float p2, float p3, float p4, float mParcial, float pf, float mFinal){
-    mediaFinal(p1, p2, p3, p4, mParcial, pf, mFinal);
+void medias(float p1, float p2, float p3, float p4, float *mParcial, float pf, float *mFinal, int count){
+    mediaFinal(p1, p2, p3, p4, mP, pf, mF);
+    mParcial[count] = mP;
+    mFinal[count] = mF;
 }
 
-void aprovados(float p1, float p2, float p3, float p4, float mParcial, float pf, float mFinal, Passei *p, int j){
-    
-}
+
 
 
 // Função principal
@@ -86,6 +86,7 @@ int main(){
     Passei p[100];
     int i, j, m;
     char nomeEntrada[20];
+    float mParcial[100], mFinal[100];
 
 // Pedindo as informações pelo teclado
     printf("Digite o nome dos arquivos de entrada: ");
@@ -107,6 +108,8 @@ int main(){
             printf("%.2f ", a.p3);
             printf("%.2f ", a.p4);
             printf("%.2f ", a.pf);
+
+            medias(float p1, float p2, float p3, float p4, float pf, float *mParcial, float *mFinal, j);
         }
 
 
@@ -128,5 +131,14 @@ para estudo de ordem alfabética
 
 -> LISTA DE AFAZERES
     . ver os que passaram, anotar o nome, a média parcial e a média final
+
+
+    param cont
+    for(i = 0; i < 10; i++){
+        funcao(*mParcial, i);
+    }
     
+    void funcao(...){
+        mParcial[i] = 10;
+    }
 */
