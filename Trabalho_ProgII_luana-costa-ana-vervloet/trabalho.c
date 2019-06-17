@@ -70,10 +70,8 @@ void mediaFinal(float p1, float p2, float p3, float p4, float mP, float pf, floa
 }
 
 // Função que retorna a média parcial e a final
-void medias(float p1, float p2, float p3, float p4, float *mParcial, float pf, float *mFinal, int count){
-    mediaFinal(p1, p2, p3, p4, mP, pf, mF);
-    mParcial[count] = mP;
-    mFinal[count] = mF;
+void medias(float p1, float p2, float p3, float p4, float pf, float *mP, float *mF, int count){
+    mediaFinal(p1, p2, p3, p4, mP[count], pf, mF[count]);
 }
 
 
@@ -86,7 +84,7 @@ int main(){
     Passei p[100];
     int i, j, m;
     char nomeEntrada[20];
-    float mParcial[100], mFinal[100];
+    float mP[100], mF[100];
 
 // Pedindo as informações pelo teclado
     printf("Digite o nome dos arquivos de entrada: ");
@@ -109,7 +107,7 @@ int main(){
             printf("%.2f ", a.p4);
             printf("%.2f ", a.pf);
 
-            medias(float p1, float p2, float p3, float p4, float pf, float *mParcial, float *mFinal, j);
+            medias(a.p1, a.p2, a.p3, a.p4, a.pf, mP, mF, j);
         }
 
 
