@@ -105,6 +105,7 @@ int main(){
     char nomeEntrada[20], nomesPB[30][100];
     float mP[100], mF[100];
 
+
 // Pedindo as informações pelo teclado
     printf("Digite o nome dos arquivos de entrada: ");
 // Loop para percorrer 10 arquivos
@@ -125,39 +126,8 @@ int main(){
             // printf("%.2f ", a.p3);
             // printf("%.2f ", a.p4);
             // printf("%.2f ", a.pf);
-
-            switch(i){
-                case 0:
-                    count = j;
-                    break;
-                case 1:
-                    count = j + 10;
-                    break;
-                case 2:
-                    count = j + 20;
-                    break;
-                case 3:
-                    count = j + 30;
-                    break;
-                case 4:
-                    count = j + 40;
-                    break;
-                case 5:
-                    count = j + 50;
-                    break;
-                case 6:
-                    count = j + 60;
-                    break;
-                case 7:
-                    count = j +70;
-                    break;
-                case 8:
-                    count = j + 80;
-                    break;   
-                default:
-                    count = j + 90;
-                    break;
-            }
+            
+            count = j + i*10;
 
             // Chama a função que calcula a média da posição
             medias(a.p1, a.p2, a.p3, a.p4, a.pf, mP, mF, count);
