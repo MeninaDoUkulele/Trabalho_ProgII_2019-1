@@ -1,5 +1,5 @@
 luana
-9 5 3 5 0
+0 0 0 0 0
 icaro
 4 6 7 9 0
 ana

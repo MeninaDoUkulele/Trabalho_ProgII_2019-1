@@ -34,9 +34,26 @@ typedef struct aluno Aluno;
 typedef struct passei Passei;
 
 
-void verificaAprovados(char *nome, float *mP, float *mF, Passei *p){
-    
-}
+// void verificaAprovados(char nome[30][100], float *mP, float *mF, Passei *p){
+//     int i, j = 0, aux;
+
+//     for(i = 0; i < 100; i++){
+
+//         if(mF[i] >= 6){
+//             // strcpy(nome[i], p->nome[j]);
+//             p[i].mediaParcial = mP[i];
+//             p[i].mediaFinal = mF[i];
+//             j++;
+//             printf("dentro do loop%i - mp:%.2f mf:%.2f\n", i, p[i].mediaParcial, p[i].mediaFinal);
+//         }
+//         if(i == 99){
+//             aux = j;
+//         }
+//     }
+//     for(i = 0; i < aux; i++){
+//         printf("fora do loop%i - mp:%.2f mf:%.2f\n", i, p[i].mediaParcial, p[i].mediaFinal);
+//     }
+// }
 
 // Função que calcula a média parcial de um caso
 float mediaParcial(float p1, float p2, float p3, float p4){
@@ -139,6 +156,8 @@ int main(){
     // Fecha o arquivo e vai para o próximo loop
         fclose(entrada);
     }
+
+    // verificaAprovados(nomesPB, mP, mF, p);
 
     for(i = 0; i < 100; i++){
         printf("%s:\n", nomesPB[i]);
