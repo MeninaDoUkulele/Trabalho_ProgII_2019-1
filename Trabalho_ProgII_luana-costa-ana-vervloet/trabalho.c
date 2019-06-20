@@ -33,27 +33,36 @@ struct passei{
 typedef struct aluno Aluno;
 typedef struct passei Passei;
 
+void ordenaMediasFinais(Passei *p, int contador){
+  
+}
 
-// void verificaAprovados(char nome[30][100], float *mP, float *mF, Passei *p){
-//     int i, j = 0, aux;
+// Função que verifica quais alunos da turma de PB foram aprovados e retorna a quantidade
+int verificaAprovados(char nome[30][100], float *mP, float *mF, Passei *p){
+    int i, j = 0;
 
-//     for(i = 0; i < 100; i++){
+    // For para preencher o struct 'passei'
+    for(i = 0; i < 100; i++){
 
-//         if(mF[i] >= 6){
-//             // strcpy(nome[i], p->nome[j]);
-//             p[i].mediaParcial = mP[i];
-//             p[i].mediaFinal = mF[i];
-//             j++;
-//             printf("dentro do loop%i - mp:%.2f mf:%.2f\n", i, p[i].mediaParcial, p[i].mediaFinal);
-//         }
-//         if(i == 99){
-//             aux = j;
-//         }
-//     }
-//     for(i = 0; i < aux; i++){
-//         printf("fora do loop%i - mp:%.2f mf:%.2f\n", i, p[i].mediaParcial, p[i].mediaFinal);
-//     }
-// }
+        // Condicional que verifica alunos acima da média
+        if(mF[i] >= 6){
+            // Atribuição de valores do aluno na struct se tiver passado
+            strcpy(p[j].nome, nome[i]);
+            p[j].mediaParcial = mP[i];
+            p[j].mediaFinal = mF[i];
+
+            // Contador do numero de alunos aprovados
+            j++;
+        }
+    }
+
+    for(i = 0; i < j; i++){
+        printf("fora do loop%i - %s\nmp:%.2f mf:%.2f\n", i, p[i].nome, p[i].mediaParcial, p[i].mediaFinal);
+    }
+
+    // Retorna o contador de alunos aprovados
+    return j;
+}
 
 // Função que calcula a média parcial de um caso
 float mediaParcial(float p1, float p2, float p3, float p4){
@@ -118,7 +127,7 @@ int main(){
     FILE *entrada, *saida;
     Aluno a;
     Passei p[100];
-    int i, j, m, count = 0;
+    int i, j, m, count = 0, contaAprovados;
     char nomeEntrada[20], nomesPB[30][100];
     float mP[100], mF[100];
 
@@ -157,12 +166,20 @@ int main(){
         fclose(entrada);
     }
 
-    // verificaAprovados(nomesPB, mP, mF, p);
+    // Chama a função que preenche o struct de aprovados
+    contaAprovados = verificaAprovados(nomesPB, mP, mF, p);
 
-    for(i = 0; i < 100; i++){
-        printf("%s:\n", nomesPB[i]);
-        printf("%i mP . %.2f mF . %.2f\n", i, mP[i], mP[i]);
+    ordenaMediasFinais(p, contaAprovados);
+    // printf("CONTADOR DE APROVADOS: %i\n", contaAprovados);
+
+    for(i = 0; i < contaAprovados; i++){
+        printf("fora do loop%i - %s\nmp:%.2f mf:%.2f\n", i, p[i].nome, p[i].mediaParcial, p[i].mediaFinal);
     }
+
+    // for(i = 0; i < 100; i++){
+    //     printf("%s:\n", nomesPB[i]);
+    //     printf("%i mP . %.2f mF . %.2f\n", i, mP[i], mP[i]);
+    // }
     
     return 0;
 }
