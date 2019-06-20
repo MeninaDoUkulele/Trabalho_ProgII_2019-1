@@ -29,13 +29,19 @@ struct passei{
     float mediaFinal;
 };
 
+
+struct turmasNovas{
+    char nome[30][10];
+    float mP[10];
+    float mF[10];
+};
+
 // Declaração de tipo struct
 typedef struct aluno Aluno;
 typedef struct passei Passei;
+typedef struct turmasNovas Turmas;
 
-void ordenaMediasFinais(Passei *p, int contador){
-  
-}
+
 
 // Função que verifica quais alunos da turma de PB foram aprovados e retorna a quantidade
 int verificaAprovados(char nome[30][100], float *mP, float *mF, Passei *p){
@@ -127,7 +133,7 @@ int main(){
     FILE *entrada, *saida;
     Aluno a;
     Passei p[100];
-    int i, j, m, count = 0, contaAprovados;
+    int i, j, m, count = 0, contaAprovados, numeroTurmas;
     char nomeEntrada[20], nomesPB[30][100];
     float mP[100], mF[100];
 
@@ -169,7 +175,8 @@ int main(){
     // Chama a função que preenche o struct de aprovados
     contaAprovados = verificaAprovados(nomesPB, mP, mF, p);
 
-    ordenaMediasFinais(p, contaAprovados);
+    numeroTurmas = contaAprovados/10 + 1;
+
     // printf("CONTADOR DE APROVADOS: %i\n", contaAprovados);
 
     for(i = 0; i < contaAprovados; i++){
