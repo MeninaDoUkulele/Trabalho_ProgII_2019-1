@@ -41,7 +41,76 @@ typedef struct aluno Aluno;
 typedef struct passei Passei;
 typedef struct turmasNovas Turmas;
 
+// Função que preenche o struct de cada turma de PA;
+void preencheTurmas(Passei *p, Turmas *t, int numeroTurmas, int contaAprovados, int resto){
+    int i, j, aux;
 
+    // Se o resto for igual a zero significa que todas as turmas possuem 10 alunos
+    // e, assim, posso preencher todas de forma igual
+    if(resto == 0){
+        // Loop que varre o vetor de structs
+        for(i = 0; i < numeroTurmas - 1; i++){
+            // Loop que varre o vetor de cada elemento do struct
+            for(j = 0; j < 10; j++){
+                // Variável auxiliar com valor maximo igual a 'contaAprovados'
+                aux = j + i * 10;
+                // Copia nome
+                strcpy(t[i].nome[j], p[aux].nome);
+                // Copia media parcial
+                t[i].mP[j] = p[aux].mediaParcial;
+                // Copia media final
+                t[i].mF[j] = p[aux].mediaFinal;
+            }
+        }
+    // Caso contrario há uma turma que o numero de loops nao sera 10, mas sim o valor
+    // de 'resto'
+    } else{
+        // Loop que varre o vetor de structs
+        for(i = 0; i < numeroTurmas - 1; i++){
+            // Condicional para verificar se nao é o último loop
+            if(i != numeroTurmas - 1){
+                // Loop que varre o vetor de cada elemento do struct
+                for(j = 0; j < 10; j++){
+                    // Variável auxiliar com valor maximo igual a 'contaAprovados'
+                    aux = j + i * 10;
+                    // Copia nome
+                    strcpy(t[i].nome[j], p[aux].nome);
+                    // Copia media parcial
+                    t[i].mP[j] = p[aux].mediaParcial;
+                    // Copia media final
+                    t[i].mF[j] = p[aux].mediaFinal;
+                }
+            // Caso seja o último loop ele faz um loop que varre 10
+            } else{
+                // Loop que varre o vetor de cada elemento do struct
+                for(j = 0; j < resto - 1; j++){
+                    // Variável auxiliar com valor maximo igual a 'contaAprovados'
+                    aux = j + i * 10;
+                    // Copia nome
+                    strcpy(t[i].nome[j], p[aux].nome);
+                    // Copia media parcial
+                    t[i].mP[j] = p[aux].mediaParcial;
+                    // Copia media final
+                    t[i].mF[j] = p[aux].mediaFinal;
+                }
+            }
+        }
+    }
+
+
+
+    for(i = 0; i < numeroTurmas - 1; i++){
+        if(i != numeroTurmas-1){
+            for(j = 0; j < 10; j++){
+                printf("%s turma %i: mp - %.2f mf - %.2f\n", t[i].nome[j], i, t[i].mP[j], t[i].mF[j]);
+            }
+        } else{
+            for(j = 0; j < resto - 1; j++){
+                printf("%s turma %i: mp - %.2f mf - %.2f\n", t[i].nome[j], i, t[i].mP[j], t[i].mF[j]);
+            }
+        }
+    }
+}
 
 // Função que verifica quais alunos da turma de PB foram aprovados e retorna a quantidade
 int verificaAprovados(char nome[30][100], float *mP, float *mF, Passei *p){
@@ -62,9 +131,9 @@ int verificaAprovados(char nome[30][100], float *mP, float *mF, Passei *p){
         }
     }
 
-    for(i = 0; i < j; i++){
-        printf("fora do loop%i - %s\nmp:%.2f mf:%.2f\n", i, p[i].nome, p[i].mediaParcial, p[i].mediaFinal);
-    }
+    // for(i = 0; i < j; i++){
+    //     printf("fora do loop%i - %s\nmp:%.2f mf:%.2f\n", i, p[i].nome, p[i].mediaParcial, p[i].mediaFinal);
+    // }
 
     // Retorna o contador de alunos aprovados
     return j;
@@ -133,7 +202,7 @@ int main(){
     FILE *entrada, *saida;
     Aluno a;
     Passei p[100];
-    int i, j, m, count = 0, contaAprovados, numeroTurmas;
+    int i, j, m, count = 0, contaAprovados, numeroTurmas, resto;
     char nomeEntrada[20], nomesPB[30][100];
     float mP[100], mF[100];
 
@@ -175,13 +244,23 @@ int main(){
     // Chama a função que preenche o struct de aprovados
     contaAprovados = verificaAprovados(nomesPB, mP, mF, p);
 
-    numeroTurmas = contaAprovados/10 + 1;
+    resto = contaAprovados%10;
+
+    if(resto != 0){
+        numeroTurmas = contaAprovados/10 + 1;
+    } else{
+        numeroTurmas = contaAprovados/10 ;
+    }
+
+    Turmas t[numeroTurmas];
+
+    preencheTurmas(p, t, numeroTurmas, contaAprovados, resto);
 
     // printf("CONTADOR DE APROVADOS: %i\n", contaAprovados);
 
-    for(i = 0; i < contaAprovados; i++){
-        printf("fora do loop%i - %s\nmp:%.2f mf:%.2f\n", i, p[i].nome, p[i].mediaParcial, p[i].mediaFinal);
-    }
+    // for(i = 0; i < contaAprovados; i++){
+    //     printf("fora do loop%i - %s\nmp:%.2f mf:%.2f\n", i, p[i].nome, p[i].mediaParcial, p[i].mediaFinal);
+    // }
 
     // for(i = 0; i < 100; i++){
     //     printf("%s:\n", nomesPB[i]);
