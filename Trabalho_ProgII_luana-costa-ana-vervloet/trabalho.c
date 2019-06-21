@@ -36,10 +36,25 @@ struct turmasNovas{
     float mF[10];
 };
 
+
+struct bolsista{
+    char nome[30];
+    float mP;
+    float mF;
+};
+
+struct auxiliar{
+    char nome[30];
+    float mP;
+    float mF;
+};
+
 // Declaração de tipo struct
 typedef struct aluno Aluno;
 typedef struct passei Passei;
 typedef struct turmasNovas Turmas;
+typedef struct bolsista Bolsista;
+typedef struct auxiliar Aux;
 
 // Função que preenche o struct de cada turma de PA;
 void preencheTurmas(Passei *p, Turmas *t, int numeroTurmas, int contaAprovados, int resto){
@@ -49,7 +64,7 @@ void preencheTurmas(Passei *p, Turmas *t, int numeroTurmas, int contaAprovados, 
     // e, assim, posso preencher todas de forma igual
     if(resto == 0){
         // Loop que varre o vetor de structs
-        for(i = 0; i < numeroTurmas - 1; i++){
+        for(i = 0; i < numeroTurmas; i++){
             // Loop que varre o vetor de cada elemento do struct
             for(j = 0; j < 10; j++){
                 // Variável auxiliar com valor maximo igual a 'contaAprovados'
@@ -66,9 +81,9 @@ void preencheTurmas(Passei *p, Turmas *t, int numeroTurmas, int contaAprovados, 
     // de 'resto'
     } else{
         // Loop que varre o vetor de structs
-        for(i = 0; i < numeroTurmas - 1; i++){
+        for(i = 0; i < numeroTurmas; i++){
             // Condicional para verificar se nao é o último loop
-            if(i != numeroTurmas - 1){
+            if(i < numeroTurmas - 1){
                 // Loop que varre o vetor de cada elemento do struct
                 for(j = 0; j < 10; j++){
                     // Variável auxiliar com valor maximo igual a 'contaAprovados'
@@ -79,11 +94,12 @@ void preencheTurmas(Passei *p, Turmas *t, int numeroTurmas, int contaAprovados, 
                     t[i].mP[j] = p[aux].mediaParcial;
                     // Copia media final
                     t[i].mF[j] = p[aux].mediaFinal;
+
                 }
             // Caso seja o último loop ele faz um loop que varre 10
             } else{
                 // Loop que varre o vetor de cada elemento do struct
-                for(j = 0; j < resto - 1; j++){
+                for(j = 0; j < resto; j++){
                     // Variável auxiliar com valor maximo igual a 'contaAprovados'
                     aux = j + i * 10;
                     // Copia nome
@@ -96,20 +112,92 @@ void preencheTurmas(Passei *p, Turmas *t, int numeroTurmas, int contaAprovados, 
             }
         }
     }
+}
 
+void verificaEmpates(Bolsista *b, int numeroNota, int *bolsistas){
+    int i, j;
 
-
-    for(i = 0; i < numeroTurmas - 1; i++){
-        if(i != numeroTurmas-1){
-            for(j = 0; j < 10; j++){
-                printf("%s turma %i: mp - %.2f mf - %.2f\n", t[i].nome[j], i, t[i].mP[j], t[i].mF[j]);
+    if(numeroNota > 5){
+        for(i = 0; i < numeroNota; i++){
+            for(j = 0; j < numeroNota; j++){
+                if(b[i].mF == b[i+1].mF){
+                }
             }
-        } else{
-            for(j = 0; j < resto - 1; j++){
-                printf("%s turma %i: mp - %.2f mf - %.2f\n", t[i].nome[j], i, t[i].mP[j], t[i].mF[j]);
+        }
+
+    } else{
+        for(i = 0; i <  numeroNota; i++){
+            printf("%s\n", b[i].nome);
+        }
+    }
+}
+
+// Função que ordena por média final os possíveis bolsistas
+void ordenaStruct(Bolsista *b, int numeroNota){
+    int h, i;
+    Aux a;
+
+    // Primeiro preciso ordenar o struct pela média final
+    // Loop vindo do último até o primeiro
+    for(i = numeroNota - 1; i > 0; i--){
+        // Loop vindo do último até o primeiro
+        for(h = 0; h < i; h++){
+            // Condicional para ver qual elemento é maior (dois em dois)
+            if(b[h].mF > b[h + 1].mF){
+                // Passa o primeiro elemento da comparacao para a auxiliar
+                strcpy(a.nome, b[h].nome);
+                a.mP = b[h].mP;
+                a.mF = b[h].mF;
+
+                // Passa o segundo elemento da comparacao para o primeiro
+                strcpy(b[h].nome, b[h + 1].nome);
+                b[h].mP = b[h + 1].mP;
+                b[h].mF = b[h + 1].mF;
+
+                // Passa a auxiliar para o segundo elemento
+                strcpy(b[h + 1].nome, a.nome);
+                b[h + 1].mP = a.mP;
+                b[h + 1].mF = a.mF;
             }
         }
     }
+    for(i = 0; i < numeroNota; i++){
+        printf("ordenado: %i - %s p - %.2f f - %.2f\n", i, b[i].nome, b[i].mP, b[i].mF);
+    }
+}
+
+
+void finalizaNota(Bolsista *b, int numeroNota){
+    int bolsistas[100];
+
+    ordenaStruct(b, numeroNota);
+    verificaEmpates(b, numeroNota, bolsistas);
+}
+
+// Função que verifica dos que passaram os que estão acima de 9,4
+int verificaNota(Passei *p, Bolsista *b, int contaAprovados){
+    int i, j = 0;
+
+    // Loop para percorrer todo o vetor de aprovados
+    for(i = 0; i < contaAprovados; i++){
+        // Condicional para armazenar apenas os acima de 9,4
+        if(p[i].mediaFinal >= 9.5){
+            // Copia o nome
+            strcpy(b[j].nome, p[i].nome);
+            // Copia a media parcial
+            b[j].mP = p[i].mediaParcial;
+            // Copia a media final
+            b[j].mF = p[i].mediaFinal;
+            // Aumenta o número do contador
+            j++;
+        }
+    }
+
+    for(i = 0; i < j; i++){
+        printf("Alunos acima de 9,4: %s p-%.2f f-%.2f\n", b[i].nome, b[i].mP, b[i].mF);
+    }
+
+    return j;
 }
 
 // Função que verifica quais alunos da turma de PB foram aprovados e retorna a quantidade
@@ -130,10 +218,6 @@ int verificaAprovados(char nome[30][100], float *mP, float *mF, Passei *p){
             j++;
         }
     }
-
-    // for(i = 0; i < j; i++){
-    //     printf("fora do loop%i - %s\nmp:%.2f mf:%.2f\n", i, p[i].nome, p[i].mediaParcial, p[i].mediaFinal);
-    // }
 
     // Retorna o contador de alunos aprovados
     return j;
@@ -194,79 +278,106 @@ void medias(float p1, float p2, float p3, float p4, float pf, float *mP, float *
     
 }
 
-
-
-
-// Função principal
-int main(){
-    FILE *entrada, *saida;
+void leArquivos(float *mP, float *mF, char nomes[30][100]){
+    int i, j, count = 0;
+    char nomeEntrada[20];
+    FILE *entrada;
     Aluno a;
-    Passei p[100];
-    int i, j, m, count = 0, contaAprovados, numeroTurmas, resto;
-    char nomeEntrada[20], nomesPB[30][100];
-    float mP[100], mF[100];
 
-
-// Pedindo as informações pelo teclado
+    // Pedindo as informações pelo teclado
     printf("Digite o nome dos arquivos de entrada: ");
-// Loop para percorrer 10 arquivos
+    // Loop para percorrer 10 arquivos
     for(i = 0; i < 10; i++){
-    // Pega o nome de cada arquivo
+        // Pega o nome de cada arquivo
         scanf("%s", nomeEntrada);
-    // Abre o arquivo
+        // Abre o arquivo
         entrada = fopen(nomeEntrada, "r");
 
-     // Lê o arquivo
+        // Lê o arquivo
         for(j = 0; j < 10; j++){
             fscanf(entrada, "%s %f %f %f %f %f", a.nome, &a.p1, &a.p2, &a.p3, &a.p4, &a.pf);
-
-            // Teste para garantir o valor das variáveis (apagar)
-            // printf("\n%s\n", a.nome);
-            // printf("%.2f ", a.p1);
-            // printf("%.2f ", a.p2);
-            // printf("%.2f ", a.p3);
-            // printf("%.2f ", a.p4);
-            // printf("%.2f ", a.pf);
             
             count = j + i*10;
 
             // Chama a função que calcula a média da posição
             medias(a.p1, a.p2, a.p3, a.p4, a.pf, mP, mF, count);
-            strcpy(nomesPB[count], a.nome);
+            strcpy(nomes[count], a.nome);
         }
 
 
 
-    // Fecha o arquivo e vai para o próximo loop
+        // Fecha o arquivo e vai para o próximo loop
         fclose(entrada);
     }
+}
+
+void gerenciaBolsista(Passei *p, Bolsista *b, int contaAprovados){
+    int numeroNota;
+    // Função que retorna o número de notas acima de 9,4 e
+    // armazena os mesmos num struct
+    numeroNota = verificaNota(p, b, contaAprovados);
+
+    // Condicional para verificar se há alunos com média acima de 9,4
+    if(numeroNota == 0){
+        printf("Nenhum aluno aprovado de PB alcaçou Média Final >= 9,5.\n");
+    } else{
+        finalizaNota(b, numeroNota);
+    }
+}
+
+
+void gerenciaAprovados(int contaAprovados, int resto, int numeroTurmas, Passei *p, Bolsista *b){
+    Turmas t[10]; // O número máximo de turmas é 10;
+
+    // Condicional para verificar se há aprovados
+    if(contaAprovados == 0){
+        printf("Não foram geradas nenhuma turma de PA devido à falta de alunos aprovados em PB.\n");
+    } else{
+        // Condional para preencher o valor de numero de turmas
+        if(resto != 0){
+            numeroTurmas = contaAprovados/10 + 1;
+        } else{
+            numeroTurmas = contaAprovados/10 ;
+        }
+
+        gerenciaBolsista(p, b, contaAprovados);
+
+        preencheTurmas(p, t, numeroTurmas, contaAprovados, resto);
+
+        // for(i = 0; i < contaAprovados; i++){
+        //     printf("fora do loop%i - %s\nmp:%.2f mf:%.2f\n", i, p[i].nome, p[i].mediaParcial, p[i].mediaFinal);
+        // }
+    }
+}
+
+void gerenciaFuncoes(float *mP, float *mF, char nomes[30][100], Passei *p, Bolsista *b){
+    int contaAprovados, numeroTurmas, resto, numeroNota;
+    Turmas t[10]; // O número máximo de turmas é 10;
+
+    leArquivos(mP, mF, nomes);
 
     // Chama a função que preenche o struct de aprovados
-    contaAprovados = verificaAprovados(nomesPB, mP, mF, p);
+    contaAprovados = verificaAprovados(nomes, mP, mF, p);
 
     resto = contaAprovados%10;
 
-    if(resto != 0){
-        numeroTurmas = contaAprovados/10 + 1;
-    } else{
-        numeroTurmas = contaAprovados/10 ;
-    }
+    gerenciaAprovados(contaAprovados, resto, numeroTurmas, p, b);
+}
 
-    Turmas t[numeroTurmas];
 
-    preencheTurmas(p, t, numeroTurmas, contaAprovados, resto);
 
-    // printf("CONTADOR DE APROVADOS: %i\n", contaAprovados);
 
-    // for(i = 0; i < contaAprovados; i++){
-    //     printf("fora do loop%i - %s\nmp:%.2f mf:%.2f\n", i, p[i].nome, p[i].mediaParcial, p[i].mediaFinal);
-    // }
+// Função principal
+int main(){
+    FILE *saida;
+    Passei p[100]; // O númeiro máximo de alunos que podem passar é 100
+    Bolsista b[100]; // O número máximo de alunos coma a média >= 9,5 é 100
+    char nomes[30][100];
+    float mP[100], mF[100];
 
-    // for(i = 0; i < 100; i++){
-    //     printf("%s:\n", nomesPB[i]);
-    //     printf("%i mP . %.2f mF . %.2f\n", i, mP[i], mP[i]);
-    // }
-    
+    // Função que gerencia operaçoes
+    gerenciaFuncoes(mP, mF, nomes, p, b);
+
     return 0;
 }
 
@@ -275,21 +386,12 @@ int main(){
 https://pt.stackoverflow.com/questions/72494/printar-strings-em-ordem-alfab%C3%A9tica
 
 para estudo de ordem alfabética
-- preciso revisar o funcionamento de struct e bibliotecas.
+- preciso revisar o funcionamento de bibliotecas.
 
 
 -> LISTA DE AFAZERES
     . ver os que passaram, anotar o nome, a média parcial e a média final
 
-
-    param cont
-    for(i = 0; i < 10; i++){
-        funcao(*mParcial, i);
-    }
-    
-    void funcao(...){
-        mParcial[i] = 10;
-    }
 
 teste1.txt teste2.txt teste3.txt teste4.txt teste5.txt teste6.txt teste7.txt teste8.txt teste9.txt teste10.txt
 */
