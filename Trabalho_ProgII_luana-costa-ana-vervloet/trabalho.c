@@ -1,4 +1,4 @@
-// Trabalho Computacional de Programação II - 2019/1
+ // Trabalho Computacional de Programação II - 2019/1
 // Ciência da Computação
 //     Alunas:
 //         Ana Carolina Vervloet dos Santos
@@ -118,12 +118,78 @@ void verificaEmpates(Bolsista *b, int numeroNota, int *bolsistas){
     int i, j;
 
     if(numeroNota > 5){
-        for(i = 0; i < numeroNota; i++){
-            for(j = 0; j < numeroNota; j++){
-                if(b[i].mF == b[i+1].mF){
-                }
+        // se os 6 forem iguais
+        if(b[0].mF == b[1].mF && b[1].mF == b[2].mF && b[2].mF == b[3].mF && b[3].mF == b[4].mF && b[4].mF == b[5].mF)
+        // se 2 - 6 for igual
+        if(b[0].mF != b[1].mF && b[1].mF == b[2].mF && b[2].mF == b[3].mF && b[3].mF == b[4].mF && b[4].mF == b[5].mF){
+            for(i = 0; i < 4; i++){
+                printf("%s\n", b[0].nome);
             }
         }
+        // se 3 - 6 for igual
+        if(b[1].mF != b[2].mF && b[2].mF == b[3].mF && b[3].mF == b[4].mF && b[4].mF == b[5].mF){
+            for(i = 0; i < 2; i++){
+                printf("%s\n", b[i].nome);
+            }
+
+        }
+        // // se 4 - 6 for igual
+        // if(b[2].mF != b[3].mF && b[3].mF == b[4].mF && b[4].mF == b[5].mF){
+        //     // Printa os 3 primeiros elementos
+        //     for(i = 0; i < 3; i++){
+        //         printf("%s\n", b[i].nome);
+        //     }
+        //     // Verifica se o 5 elemento é o menor
+        //     if(b[4].mF < b[5].mF &&  b[4].mF < b[3].mF){
+        //         printf("%s\n%s\n", b[3].mF, b[5].nome);            
+        //     }
+        //     // Verifica se o 4 elemento é o menor
+        //     if(b[3].mF < b[5].mF &&  b[3].mF < b[4].mF){
+        //         printf("%s\n%s\n", b[4].mF, b[5].nome);            
+        //     }
+        //     // Verifica se o 6 elemento é o menor
+        //     if(b[5].mF < b[4].mF &&  b[5].mF < b[3].mF){
+        //         printf("%s\n%s\n", b[3].mF, b[4].nome);            
+        //     }
+            
+        //     if(b[5].mF == b[4].mF &&  b[5].mF <= b[3].mF){
+        //         printf("%s\n%s\n%s\n", b[3].mF, b[4].nome, b[5].nome);            
+        //     }
+
+        //     if(b[5].mF == b[4].mF &&  b[5].mF > b[3].mF){
+        //         printf("%s\n%s\n", b[4].nome, b[5].nome);            
+        //     }
+
+        //     if(b[3].mF == b[4].mF &&  b[3].mF <= b[5].mF){
+        //         printf("%s\n%s\n%s\n", b[3].mF, b[4].nome, b[5].nome);            
+        //     }
+
+        //     if(b[3].mF == b[4].mF &&  b[3].mF > b[5].mF){
+        //         printf("%s\n%s\n", b[3].nome, b[4].nome);            
+        //     }
+
+        // }
+        // // se 5 - 6 for igual
+        // f(b[3].mF != b[4].mF && b[4].mF == b[5].mF){
+        //     for(i = 0; i < 4; i++){
+        //         printf("%s\n", b[i].nome);
+        //     }
+        //     if(b[4].mF < b[5].mF){
+        //         printf("%s\n", b[5].nome);                
+        //     }
+        //     if(b[4].mF > b[5].mF){
+        //         printf("%s\n", b[4].nome);                
+        //     }
+        //     if(b[4].mF == b[5].mF){
+        //         printf("%s\n%s\n", b[4].mF, b[5].nome);                
+        //     }
+        // }
+        // // se o 6 for menor
+        // if(b[4].mF != b[5].mF){
+        //     for(i = 0; i < 5; i++){
+        //         printf("%s\n", b[i].nome);
+        //     }
+        // }
 
     } else{
         for(i = 0; i <  numeroNota; i++){
@@ -131,6 +197,42 @@ void verificaEmpates(Bolsista *b, int numeroNota, int *bolsistas){
         }
     }
 }
+
+/*
+casos
+    se os 6 forem iguais
+        if(b[0].mF == b[1].mF && b[1].mF == b[2].mF && b[2].mF == b[3].mF && b[3].mF == b[4].mF && b[4].mF == b[5].mF)
+    se 2 - 6 for igual
+        if(b[0].mF != b[1].mF && b[1].mF == b[2].mF && b[2].mF == b[3].mF && b[3].mF == b[4].mF && b[4].mF == b[5].mF){
+            for(i = 0; i < 4; i++){
+                printf("%s\n", b[0].nome);
+            }
+        }
+    se 3 - 6 for igual
+        if(b[1].mF != b[2].mF && b[2].mF == b[3].mF && b[3].mF == b[4].mF && b[4].mF == b[5].mF){
+            for(i = 0; i < 2; i++){
+                printf("%s\n", b[i].nome);
+            }
+        }
+    se 4 - 6 for igual
+        if(b[2].mF != b[3].mF && b[3].mF == b[4].mF && b[4].mF == b[5].mF){
+            for(i = 0; i < 3; i++){
+                printf("%s\n", b[i].nome);
+            }
+        }
+    se 5 - 6 for igual
+        f(b[3].mF != b[4].mF && b[4].mF == b[5].mF){
+            for(i = 0; i < 4; i++){
+                printf("%s\n", b[i].nome);
+            }
+        }
+    se o 6 for menor
+        if(b[4].mF != b[5].mF){
+            for(i = 0; i < 5; i++){
+                printf("%s\n", b[i].nome);
+            }
+        }
+*/
 
 // Função que ordena por média final os possíveis bolsistas
 void ordenaStruct(Bolsista *b, int numeroNota){
