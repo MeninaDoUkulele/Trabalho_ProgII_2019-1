@@ -49,7 +49,7 @@ typedef struct bolsista Bolsista;
 typedef struct auxiliar Aux;
 
 
-void ordemAlfabetica(char nome[30][10], int contador){
+void printaAlfabetica(char nome[30][10], int contador){
     char aux[20];
     int j, i;
 
@@ -67,8 +67,8 @@ void ordemAlfabetica(char nome[30][10], int contador){
     }
 
     // só mostrar a matriz
-    for (i = 0; i < contador; i++)
-    printf("\n%s", nome[i]);
+
+    
 }
 
 
@@ -81,23 +81,32 @@ void preencheTurmas(Passei *p, int numeroTurmas, int contaAprovados, int resto){
     printf("Digite o nome dos arquivos de saída: ");
 
     for(i = 0; i < numeroTurmas; i++){
-        printf("to no loop do preenche turmas\n");
         scanf("%s", nomeSaida);
 
         saida = fopen(nomeSaida, "w");
+
+        fprintf(saida ,"Turma %i:\n\n", i + 1);
 
         if(resto != 0 && i == numeroTurmas - 1){
             for(j = 0; j < resto; j++){
                 aux = j + i * 10;
                 strcpy(nomes[j], p[aux].nome); 
             }
-            ordemAlfabetica(nomes, resto);
+            printaAlfabetica(nomes, resto);
+            for (i = 0; i < resto; i++){
+                fprintf(saida ,"%s\n", nomes[i]);
+            }
+
         } else{
             for(j = 0; j < 10; j++){
                 aux = j + i * 10;
                 strcpy(nomes[j], p[aux].nome); 
             }
-            ordemAlfabetica(nomes, 10);
+            printaAlfabetica(nomes, 10);
+            for (i = 0; i < 10; i++){
+                fprintf(saida ,"%s\n", nomes[i]);
+            }
+
         }
 
     }
@@ -138,6 +147,7 @@ void ordenaParcial(Aux *a, int contador){
 void auxiliaVerifica(Aux *a, Bolsista *b, int posicao){
     int i, j = 0;
 
+    
     for(i = posicao; i < 6; i++){
         strcpy(a[j].nome, b[i].nome);
         a[j].mF = b[i].mF;
@@ -157,13 +167,15 @@ void auxiliaVerifica(Aux *a, Bolsista *b, int posicao){
         for(i = 0; i < j; i++){
             printf("%s\n", a[i].nome);
         }
-    } 
+    }
 }
 
 // Função que verifica os empates
 void verificaEmpates(Bolsista *b, int numeroNota, int *bolsistas){
     int i, posicao = 0;
     Aux a[10];
+
+    printf("\n\nAlunos bolsistas:\n");
 
     if(numeroNota > 5){
         // se os 6 forem iguais
@@ -227,6 +239,9 @@ void verificaEmpates(Bolsista *b, int numeroNota, int *bolsistas){
             printf("%s\n", b[i].nome);
         }
     }
+
+    printf("\n"); 
+
 }
 
 
@@ -259,9 +274,7 @@ void ordenaStruct(Bolsista *b, int numeroNota){
             }
         }
     }
-    for(i = 0; i < numeroNota; i++){
-        printf("ordenado: %i - %s p - %.2f f - %.2f\n", i, b[i].nome, b[i].mP, b[i].mF);
-    }
+    
 }
 
 
@@ -291,9 +304,6 @@ int verificaNota(Passei *p, Bolsista *b, int contaAprovados){
         }
     }
 
-    for(i = 0; i < j; i++){
-        printf("Alunos acima de 9,4: %s p-%.2f f-%.2f\n", b[i].nome, b[i].mP, b[i].mF);
-    }
 
     return j;
 }
@@ -317,9 +327,6 @@ int verificaAprovados(char nome[30][100], float *mP, float *mF, Passei *p){
         }
     }
 
-    for(i = 0; i < j; i++){
-        printf("verificaAprovados: %s\n", p[i].nome);
-    }
 
     // Retorna o contador de alunos aprovados
     return j;
@@ -410,9 +417,6 @@ void leArquivos(float *mP, float *mF, char nomes[30][100]){
         fclose(entrada);
     }
 
-    for(j = 0; j < 100; j++){
-        printf("leArquivos: %s\n", nomes[j]);
-    }
 }
 
 void gerenciaBolsista(Passei *p, Bolsista *b, int contaAprovados){
@@ -430,8 +434,8 @@ void gerenciaBolsista(Passei *p, Bolsista *b, int contaAprovados){
 }
 
 
-void gerenciaAprovados(int contaAprovados, int resto, int numeroTurmas, Passei *p, Bolsista *b){
-    int i, j;
+int gerenciaAprovados(int contaAprovados, int resto, Passei *p, Bolsista *b){
+    int i, j, numeroTurmas;
 
     // Condicional para verificar se há aprovados
     if(contaAprovados == 0){
@@ -446,12 +450,11 @@ void gerenciaAprovados(int contaAprovados, int resto, int numeroTurmas, Passei *
 
         gerenciaBolsista(p, b, contaAprovados);
 
-        for(i = 0; i < contaAprovados; i++){
-            printf("gerenciaAprovados: %s\n", p[i].nome);
-        }
 
 
     }
+
+    return numeroTurmas;
 }
 
 void gerenciaFuncoes(float *mP, float *mF, char nomes[30][100], Passei *p, Bolsista *b){
@@ -459,12 +462,16 @@ void gerenciaFuncoes(float *mP, float *mF, char nomes[30][100], Passei *p, Bolsi
 
     leArquivos(mP, mF, nomes);
 
+    // for(int i; i < 100; i++){
+    //     printf("%.2f\n", mP[i]);
+    // }
+
     // Chama a função que preenche o struct de aprovados
     contaAprovados = verificaAprovados(nomes, mP, mF, p);
 
     resto = contaAprovados%10;
 
-    gerenciaAprovados(contaAprovados, resto, numeroTurmas, p, b);
+    numeroTurmas = gerenciaAprovados(contaAprovados, resto, p, b);
 
     preencheTurmas(p, numeroTurmas, contaAprovados, resto);
 }
@@ -487,16 +494,10 @@ int main(){
 
 
 /*
-https://pt.stackoverflow.com/questions/72494/printar-strings-em-ordem-alfab%C3%A9tica
 
-para estudo de ordem alfabética
 - preciso revisar o funcionamento de bibliotecas.
-
-
--> LISTA DE AFAZERES
-    . ver os que passaram, anotar o nome, a média parcial e a média final
-
 
 teste1.txt teste2.txt teste3.txt teste4.txt teste5.txt teste6.txt teste7.txt teste8.txt teste9.txt teste10.txt
 pb1 pb2 pb3 pb4 pb5 pb6 pb7 pb8 pb9 pb10
+pa1 pa2 pa3 pa4 pa5 pa6 pa7 pa8 pa9 pa10
 */
