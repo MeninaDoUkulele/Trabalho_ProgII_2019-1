@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
+// #include <math.h>
 
 
 
@@ -49,7 +49,7 @@ typedef struct bolsista Bolsista;
 typedef struct auxiliar Aux;
 
 
-void printaAlfabetica(char nome[30][10], int contador){
+void printaAlfabetica(char nome[30][10], int contador, FILE *saida){
     char aux[20];
     int j, i;
 
@@ -66,7 +66,9 @@ void printaAlfabetica(char nome[30][10], int contador){
         }
     }
 
-    // só mostrar a matriz
+    for (i = 0; i < 10; i++){
+        fprintf(saida ,"%s\n", nome[i]);
+    }
 
     
 }
@@ -78,9 +80,8 @@ void preencheTurmas(Passei *p, int numeroTurmas, int contaAprovados, int resto){
     char nomeSaida[20], nomes[30][10];
     FILE *saida;
 
-    printf("Digite o nome dos arquivos de saída: ");
-
     for(i = 0; i < numeroTurmas; i++){
+        printf("Digite o nome do arquivo de saída da turma %i: ", i+1);
         scanf("%s", nomeSaida);
 
         saida = fopen(nomeSaida, "w");
@@ -92,23 +93,18 @@ void preencheTurmas(Passei *p, int numeroTurmas, int contaAprovados, int resto){
                 aux = j + i * 10;
                 strcpy(nomes[j], p[aux].nome); 
             }
-            printaAlfabetica(nomes, resto);
-            for (i = 0; i < resto; i++){
-                fprintf(saida ,"%s\n", nomes[i]);
-            }
+            printaAlfabetica(nomes, resto, saida);
 
         } else{
             for(j = 0; j < 10; j++){
                 aux = j + i * 10;
                 strcpy(nomes[j], p[aux].nome); 
             }
-            printaAlfabetica(nomes, 10);
-            for (i = 0; i < 10; i++){
-                fprintf(saida ,"%s\n", nomes[i]);
-            }
+            printaAlfabetica(nomes, 10, saida);
 
         }
 
+        fclose(saida);
     }
 
 
@@ -144,11 +140,11 @@ void ordenaParcial(Aux *a, int contador){
 }
 
 // Funcao auxiliar da funcao que verifica os empates
-void auxiliaVerifica(Aux *a, Bolsista *b, int posicao){
+void auxiliaVerifica(Aux *a, Bolsista *b, int posicao, int contador){
     int i, j = 0;
 
-    
-    for(i = posicao; i < 6; i++){
+    printf("aaaa");
+    for(i = posicao; i < contador; i++){
         strcpy(a[j].nome, b[i].nome);
         a[j].mF = b[i].mF;
         a[j].mP = b[i].mP;
@@ -156,31 +152,28 @@ void auxiliaVerifica(Aux *a, Bolsista *b, int posicao){
     }
     // Ordena pela média parcial
     ordenaParcial(a, j);
-
-    // Verifica se o 5 elemento é maior que o 6
-    if(a[4].mP > a[5].mP){
-        for(i = 0; i < j - 1; i++){
-            printf("%s\n", a[i].nome);
-        }
-    // Verifica se os elementos sao iguais
-    } else{
-        for(i = 0; i < j; i++){
+    
+    for(i = 4; i < contador; i++){
+        if(a[i].mP == a[4].mP){
             printf("%s\n", a[i].nome);
         }
     }
+
+    
 }
 
 // Função que verifica os empates
-void verificaEmpates(Bolsista *b, int numeroNota, int *bolsistas){
+void verificaEmpates(Bolsista *b, int numeroNota){
     int i, posicao = 0;
     Aux a[10];
 
-    printf("\n\nAlunos bolsistas:\n");
+
+    printf("\nAlunos bolsistas:\n");
 
     if(numeroNota > 5){
         // se os 6 forem iguais
         if(b[0].mF == b[1].mF && b[1].mF == b[2].mF && b[2].mF == b[3].mF && b[3].mF == b[4].mF && b[4].mF == b[5].mF){
-            auxiliaVerifica(a, b, posicao);
+            auxiliaVerifica(a, b, posicao, numeroNota);
         }
 
         // se 2 - 6 for igual
@@ -191,7 +184,7 @@ void verificaEmpates(Bolsista *b, int numeroNota, int *bolsistas){
 
             posicao = 1;
             
-            auxiliaVerifica(a, b, posicao);
+            auxiliaVerifica(a, b, posicao, numeroNota);
         }
 
         // se 3 - 6 for igual
@@ -202,7 +195,7 @@ void verificaEmpates(Bolsista *b, int numeroNota, int *bolsistas){
 
             posicao = 2;
             
-            auxiliaVerifica(a, b, posicao);
+            auxiliaVerifica(a, b, posicao, numeroNota);
 
         }
 
@@ -215,7 +208,7 @@ void verificaEmpates(Bolsista *b, int numeroNota, int *bolsistas){
 
             posicao = 3;
             
-            auxiliaVerifica(a, b, posicao);
+            auxiliaVerifica(a, b, posicao, numeroNota);
             
 
         }
@@ -279,10 +272,9 @@ void ordenaStruct(Bolsista *b, int numeroNota){
 
 
 void finalizaNota(Bolsista *b, int numeroNota){
-    int bolsistas[100];
 
     ordenaStruct(b, numeroNota);
-    verificaEmpates(b, numeroNota, bolsistas);
+    verificaEmpates(b, numeroNota);
 }
 
 // Função que verifica dos que passaram os que estão acima de 9,4
