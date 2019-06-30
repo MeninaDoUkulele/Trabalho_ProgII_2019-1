@@ -56,6 +56,7 @@ void preencheTurmas(Passei *p, int numeroTurmas, int contaAprovados, int resto){
     char nomeSaida[20], nomes[30][10];
     FILE *saida;
 
+    printf("\n");
     // Loop que roda a quantidade de turmas
     for(i = 0; i < numeroTurmas; i++){
         printf("Digite o nome do arquivo de saída da turma %i: ", i+1);
@@ -132,7 +133,6 @@ void verificaEmpates(Bolsista *b, int numeroNota){
     Aux a[100];
     char bolsista[30][100], suplente[30][100];
 
-    printf("%i\n", numeroNota);
     printf("\nAlunos bolsistas:\n");
 
     // Se houverem mais de 5 alunos com média final maior que 9,4
@@ -392,9 +392,6 @@ void gerenciaFuncoes(float *mP, float *mF, char nomes[30][100], Passei *p, Bolsi
 
     leArquivos(mP, mF, nomes);
 
-    for(int i; i < 100; i++){
-        printf("nome: %s | media parcial: %.2f | media final: %.2f\n", nomes[i], mP[i], mF[i]);
-    }
 
     // Chama a função que preenche o struct de aprovados
     contaAprovados = verificaAprovados(nomes, mP, mF, p);
