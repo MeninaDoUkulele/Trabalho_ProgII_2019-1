@@ -84,3 +84,18 @@ void printaAlfabetica(char nome[30][10], int contador, FILE *saida){
 
     
 }
+
+
+void printaSuplente(char suplente[30][100], int s){
+    FILE *suplentes;
+    int i;
+
+    suplentes = fopen("suplentes", "w");
+
+    fprintf(suplentes, "Lista de Suplentes:\n\n");
+    for(i = 0; i < s; i++){
+        fprintf(suplentes, "%s\n", suplente[i]);
+    }
+
+    fclose(suplentes);
+}
