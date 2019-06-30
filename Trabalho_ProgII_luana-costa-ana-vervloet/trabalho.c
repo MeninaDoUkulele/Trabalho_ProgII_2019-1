@@ -8,7 +8,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-// #include <math.h>
+#include "auxlib.h"
+
 
 
 
@@ -49,57 +50,41 @@ typedef struct bolsista Bolsista;
 typedef struct auxiliar Aux;
 
 
-void printaAlfabetica(char nome[30][10], int contador, FILE *saida){
-    char aux[20];
-    int j, i;
-
-
-
-    for (i = 1; i < contador; i++) { /* 3 = qtde de palavras */
-        for (j = 1; j < contador; j++) {
-            // verifica se tem que ser depois, se for troca de posição
-            if (strcmp(nome[j - 1], nome[j]) > 0) {
-                strcpy(aux, nome[j - 1]);
-                strcpy(nome[j - 1], nome[j]);
-                strcpy(nome[j], aux);
-            }
-        }
-    }
-
-    for (i = 0; i < 10; i++){
-        fprintf(saida ,"%s\n", nome[i]);
-    }
-
-    
-}
-
-
 // Função que preenche o struct de cada turma de PA;
 void preencheTurmas(Passei *p, int numeroTurmas, int contaAprovados, int resto){
     int i, j, aux;
     char nomeSaida[20], nomes[30][10];
     FILE *saida;
 
+    // Loop que roda a quantidade de turmas
     for(i = 0; i < numeroTurmas; i++){
         printf("Digite o nome do arquivo de saída da turma %i: ", i+1);
+        // Armazena o nome do arquivo de saída
         scanf("%s", nomeSaida);
 
+        // Abre o arquivo
         saida = fopen(nomeSaida, "w");
 
+        // Printa o número da turma, apenas por organização
         fprintf(saida ,"Turma %i:\n\n", i + 1);
 
+        // Se uma das turmas não estiver com o número máximo
         if(resto != 0 && i == numeroTurmas - 1){
+            // No último loop (última turma formada), muda o parâmetro do for
             for(j = 0; j < resto; j++){
                 aux = j + i * 10;
                 strcpy(nomes[j], p[aux].nome); 
             }
+            // Chama a função que printa e ordena alfabeticamente
             printaAlfabetica(nomes, resto, saida);
-
+        // Caso contrário
         } else{
+            // O loop percorre todas as turmas preenchendo com 10 alunos
             for(j = 0; j < 10; j++){
                 aux = j + i * 10;
                 strcpy(nomes[j], p[aux].nome); 
             }
+            // Chama a função que printa e ordena alfabeticamente
             printaAlfabetica(nomes, 10, saida);
 
         }
@@ -110,11 +95,12 @@ void preencheTurmas(Passei *p, int numeroTurmas, int contaAprovados, int resto){
 
 }
 
-
+// Função que ordena as médias parciais
 void ordenaParcial(Aux *a, int contador){
     int i, h;
     Aux u;
 
+    // Loop que percorre o vetor de struct
     for(i = contador - 1; i > 0; i--){
         // Loop vindo do último até o primeiro
         for(h = 0; h < i; h++){
@@ -139,103 +125,160 @@ void ordenaParcial(Aux *a, int contador){
     }
 }
 
-// Funcao auxiliar da funcao que verifica os empates
-void auxiliaVerifica(Aux *a, Bolsista *b, int posicao, int contador){
-    int i, j = 0;
 
-    printf("aaaa");
-    for(i = posicao; i < contador; i++){
-        strcpy(a[j].nome, b[i].nome);
-        a[j].mF = b[i].mF;
-        a[j].mP = b[i].mP;
-        j++;
-    }
-    // Ordena pela média parcial
-    ordenaParcial(a, j);
-    
-    for(i = 4; i < contador; i++){
-        if(a[i].mP == a[4].mP){
-            printf("%s\n", a[i].nome);
-        }
-    }
-
-    
-}
-
-// Função que verifica os empates
 void verificaEmpates(Bolsista *b, int numeroNota){
-    int i, posicao = 0;
-    Aux a[10];
+    int i, j = 0, suplentes, empates, vetorIndice[100];
+    Aux a[100];
 
 
     printf("\nAlunos bolsistas:\n");
 
+    // Se houverem mais de 5 alunos com média final maior que 9,4
     if(numeroNota > 5){
-        // se os 6 forem iguais
-        if(b[0].mF == b[1].mF && b[1].mF == b[2].mF && b[2].mF == b[3].mF && b[3].mF == b[4].mF && b[4].mF == b[5].mF){
-            auxiliaVerifica(a, b, posicao, numeroNota);
-        }
+        printf("ola\n");
+            // Condicional para ver se há empates depois do 5 elemento
+            if(b[4].mF != b[5].mF){
+                for(i = 0; i <  5; i++){
+                    printf("%s\n", b[i].nome);
+                }
+                suplentes = numeroNota - 5;
+                printf("%i\n", suplentes);
+                    // Se a media final de i for igual à do quinto colocado 
+                    // Como está ordenado estará do lado dele
+            } else{ 
+                for(i = 0; i < numeroNota; i++){
+                    printf("to no loop se preocupa n\n");
+                    if(b[i].mF == b[4].mF){
+                        // Copia o igual
+                        strcpy(a[j].nome, b[i].nome);
+                        a[j].mF = b[i].mF;
+                        a[j].mP = b[i].mP;
 
-        // se 2 - 6 for igual
-        if(b[0].mF != b[1].mF && b[1].mF == b[2].mF && b[2].mF == b[3].mF && b[3].mF == b[4].mF && b[4].mF == b[5].mF){
-            for(i = 0; i < 4; i++){
-                printf("%s\n", b[0].nome);
+                        j++;
+                    }
+                }
+
             }
 
-            posicao = 1;
-            
-            auxiliaVerifica(a, b, posicao, numeroNota);
+        for(i = 0; i < j; i++){
+            printf("nome %s mP %.2f mF %.2f\n", a[i].nome, a[i].mP, a[i].mF);
         }
 
-        // se 3 - 6 for igual
-        if(b[1].mF != b[2].mF && b[2].mF == b[3].mF && b[3].mF == b[4].mF && b[4].mF == b[5].mF){
-            for(i = 0; i < 2; i++){
-                printf("%s\n", b[i].nome);
-            }
-
-            posicao = 2;
-            
-            auxiliaVerifica(a, b, posicao, numeroNota);
-
-        }
-
-        // se 4 - 6 for igual
-        if(b[2].mF != b[3].mF && b[3].mF == b[4].mF && b[4].mF == b[5].mF){
-            // Printa os 3 primeiros elementos
-            for(i = 0; i < 3; i++){
-                printf("%s\n", b[i].nome);
-            }
-
-            posicao = 3;
-            
-            auxiliaVerifica(a, b, posicao, numeroNota);
-            
-
-        }
-
-        // se 5 - 6 for igual
-        if(b[4].mF == b[5].mF){
-            for(i = 0; i < 6; i++){
-                printf("%s\n", b[i].nome);
-            }
-        }
-
-        // se o 6 for menor
-        if(b[4].mF != b[5].mF){
-            for(i = 0; i < 5; i++){
-                printf("%s\n", b[i].nome);
-            }
-        }
-
+    // Se não houver printa todos e não há suplentes
     } else{
+        // Loop que percorre todos os que tiveram média para bolsista
         for(i = 0; i <  numeroNota; i++){
             printf("%s\n", b[i].nome);
         }
     }
 
-    printf("\n"); 
+    printf("socorr\n"); 
 
 }
+
+
+// // Funcao auxiliar da funcao que verifica os empates
+// void auxiliaVerifica(Aux *a, Bolsista *b, int posicao, int contador){
+//     int i, j = 0, aux = 0;
+
+//     // Loop que copia informaçoes de parte do struct de bolsistas para o auxiliar
+//     for(i = posicao; i < contador; i++){
+//         strcpy(a[j].nome, b[i].nome);
+//         a[j].mF = b[i].mF;
+//         a[j].mP = b[i].mP;
+//         j++;
+//     }
+//     // Ordena pela média parcial
+//     ordenaParcial(a, j);
+    
+//     // Printa os bolsistas que empataram
+//     for(i = 4; i < contador; i++){
+//         if(a[i].mP == a[4].mP){
+//             printf("%s\n", a[i].nome);
+//             aux++;
+//         } // Obs: esse condicional sempre printará o primeiro elemento da lista ordenada
+//     }
+
+    
+// }
+
+// // Função que verifica os empates
+// void verificaEmpates(Bolsista *b, int numeroNota){
+//     int i, posicao = 0;
+//     Aux a[10];
+
+
+//     printf("\nAlunos bolsistas:\n");
+
+//     // Se houverem mais de 5 alunos com média final maior que 9,4
+//     if(numeroNota > 5){
+//         // se os 6 forem iguais
+//         if(b[0].mF == b[1].mF && b[1].mF == b[2].mF && b[2].mF == b[3].mF && b[3].mF == b[4].mF && b[4].mF == b[5].mF){
+//             // Chama função que desempata
+//             auxiliaVerifica(a, b, posicao, numeroNota);
+//         }
+
+//         // se 2 - 6 for igual
+//         if(b[0].mF != b[1].mF && b[1].mF == b[2].mF && b[2].mF == b[3].mF && b[3].mF == b[4].mF && b[4].mF == b[5].mF){
+//             for(i = 0; i < 4; i++){
+//                 printf("%s\n", b[0].nome);
+//             }
+
+//             posicao = 1;
+            
+//             auxiliaVerifica(a, b, posicao, numeroNota);
+//         }
+
+//         // se 3 - 6 for igual
+//         if(b[1].mF != b[2].mF && b[2].mF == b[3].mF && b[3].mF == b[4].mF && b[4].mF == b[5].mF){
+//             for(i = 0; i < 2; i++){
+//                 printf("%s\n", b[i].nome);
+//             }
+
+//             posicao = 2;
+            
+//             auxiliaVerifica(a, b, posicao, numeroNota);
+
+//         }
+
+//         // se 4 - 6 for igual
+//         if(b[2].mF != b[3].mF && b[3].mF == b[4].mF && b[4].mF == b[5].mF){
+//             // Printa os 3 primeiros elementos
+//             for(i = 0; i < 3; i++){
+//                 printf("%s\n", b[i].nome);
+//             }
+
+//             posicao = 3;
+            
+//             auxiliaVerifica(a, b, posicao, numeroNota);
+            
+
+//         }
+
+//         // se 5 - 6 for igual
+//         if(b[4].mF == b[5].mF){
+//             for(i = 0; i < 6; i++){
+//                 printf("%s\n", b[i].nome);
+//             }
+//         }
+
+//         // se o 6 for menor
+//         if(b[4].mF != b[5].mF){
+//             for(i = 0; i < 5; i++){
+//                 printf("%s\n", b[i].nome);
+//             }
+//         }
+//     // Se não houver printa todos e não há suplentes
+//     } else{
+//         // Loop que percorre todos os que tiveram média para bolsista
+//         for(i = 0; i <  numeroNota; i++){
+//             printf("%s\n", b[i].nome);
+//         }
+//     }
+
+//     printf("\n"); 
+
+// }
 
 
 // Função que ordena por média final os possíveis bolsistas
@@ -270,10 +313,11 @@ void ordenaStruct(Bolsista *b, int numeroNota){
     
 }
 
-
+// Função que gerencia funções relacionadas a bolsistas
 void finalizaNota(Bolsista *b, int numeroNota){
-
+    // Chama função que ordena pela média final
     ordenaStruct(b, numeroNota);
+    // Chama função que analisa os resultados
     verificaEmpates(b, numeroNota);
 }
 
@@ -322,61 +366,6 @@ int verificaAprovados(char nome[30][100], float *mP, float *mF, Passei *p){
 
     // Retorna o contador de alunos aprovados
     return j;
-}
-
-// Função que calcula a média parcial de um caso
-float mediaParcial(float p1, float p2, float p3, float p4){
-    float mP, menor = 10, soma;
-
-// Soma de todas as notas (incluindo a menor)
-    soma = p1 + p2 + p3 + p4;
-
-// Condicionais para descobrir a menor nota
-    if(menor >= p1){
-        menor = p1;
-    }
-
-    if(menor >= p2){
-        menor = p2;
-    }
-
-    if(menor >= p3){
-        menor = p3;
-    }
-
-    if(menor >= p4){
-        menor = p4;
-    }
-
-    soma = soma - menor;
-
-    mP = soma/3;
-   
-    // Retorna a média parcial
-    return mP;
-}
-
-// Função que calcula a média final de um caso
-float mediaFinal(float p1, float p2, float p3, float p4, float pf){
-    float mP, mF;
-
-    // Chama a função que calcula a média parcial
-    mP = mediaParcial(p1, p2, p3, p4);
-
-    // Faz o cálculo da média final
-    mF = (mP + pf)/2;
-    
-    // Retorna a média final
-    return mF;
-}
-
-// Função que retorna a média parcial e a final
-void medias(float p1, float p2, float p3, float p4, float pf, float *mP, float *mF, int count){
-    // Atribui à posição do contador no momento a media final
-    mF[count] = mediaFinal(p1, p2, p3, p4, pf);
-    // Atribui à posição do contador no momento a media parcial
-    mP[count] = mediaParcial(p1, p2, p3, p4);
-    
 }
 
 void leArquivos(float *mP, float *mF, char nomes[30][100]){
